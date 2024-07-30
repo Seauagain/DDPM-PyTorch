@@ -161,7 +161,7 @@ def eval(args):
     with torch.no_grad():
         device = torch.device(args.device)
         # args = DataAttr(args)
-        model = load_model(args.model_home, args.model_name, args.epoch)
+        model = load_model(args.model_home, args.model_name, args.eval_epoch)
         model.eval()
         sampler = GaussianDiffusionSampler(model, args.beta_1, args.beta_T, args.T).to(device)
         # Sampled from standard normal distribution

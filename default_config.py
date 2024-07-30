@@ -46,6 +46,5 @@ def get_default_config():
     note = "测试demo"
 
     default_config = locals() # record previous parameters as dict.
-    print(default_config)
     return default_config
     
