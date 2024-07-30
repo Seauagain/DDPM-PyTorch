@@ -1,5 +1,12 @@
 # Object file
 *.o
 
-# Ada Library Information
-*.ali
+# MacOS hidden file
+.DS_Store
+
+# numpy binary format file 
+*.npy 
+*.npz
+
+# python temp
+*__pycache__* 
