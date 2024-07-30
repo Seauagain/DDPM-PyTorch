@@ -74,7 +74,7 @@ def train(args: DataAttribute):
     # start training
     for epoch in range(1, args.max_epoch+1):
         train_loss = 0
-        with tqdm(train_dataloader, ncols = 200) as tqdmDataLoader: # dynamic_ncols=True
+        with tqdm(train_dataloader, dynamic_ncols=True) as tqdmDataLoader: # dynamic_ncols=True
             for images, labels in tqdmDataLoader:
                 # train
                 optimizer.zero_grad()

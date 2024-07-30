@@ -49,17 +49,17 @@ class DownSample(nn.Module):
     
     def __init__(self, in_channels, args):
         super().__init__()
-        self.main = nn.Conv2d(in_channels, in_channels, 3, stride=2, padding=1)
+        self.conv = nn.Conv2d(in_channels, in_channels, 3, stride=2, padding=1)
         self.std_rate = args.std_rate
         self.initialize()
 
     def initialize(self):
-        # init.xavier_uniform_(self.main.weight)
-        init.normal_(self.main.weight, mean=0, std=self.main.weight.size(1)**(-self.std_rate))
-        init.zeros_(self.main.bias)
+        # init.xavier_uniform_(self.conv.weight)
+        init.normal_(self.conv.weight, mean=0, std=self.conv.weight.size(1)**(-self.std_rate))
+        init.zeros_(self.conv.bias)
 
     def forward(self, x, time_emb):
-        x = self.main(x)
+        x = self.conv(x)
         return x
 
 
@@ -68,19 +68,19 @@ class UpSample(nn.Module):
 
     def __init__(self, in_channels, args):
         super().__init__()
-        self.main = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1)
+        self.conv = nn.Conv2d(in_channels, in_channels, 3, stride=1, padding=1)
         self.std_rate = args.std_rate
         self.initialize()
 
     def initialize(self):
-        init.normal_(self.main.weight, mean = 0, std = self.main.weight.size(1)**(-self.std_rate))
-        # init.xavier_uniform_(self.main.weight)
-        init.zeros_(self.main.bias)
+        init.normal_(self.conv.weight, mean = 0, std = self.conv.weight.size(1)**(-self.std_rate))
+        # init.xavier_uniform_(self.conv.weight)
+        init.zeros_(self.conv.bias)
 
     def forward(self, x, temb):
         _, _, H, W = x.shape
         x = F.interpolate(x, scale_factor=2, mode='nearest')
-        x = self.main(x)
+        x = self.conv(x)
         return x
 
 
