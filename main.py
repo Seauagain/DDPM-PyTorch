@@ -3,54 +3,26 @@ from ddpm.model import train, eval
 from ddpm.utils import *
 
 
+
+def args_process(args):
+    """二次处理"""
+    args.model_name = f"ddpm_init_{args.std_rate}"
+    args.model_path = os.path.join(args.model_home, args.model_name)
+    args.model_code_path = os.path.join(".", args.model_path, "code")
+    args.dataset_path = os.path.join(args.data_home, args.dataset)
+    args.sampledNoisyImgName = f"NoisyNoGuidenceImgs_std_rate{args.std_rate}_epoch{args.eval_epoch}.png"
+    args.sampledImgName = f"SampledNoGuidenceImgs_std_rate{args.std_rate}_epoch{args.eval_epoch}.png"
+    return args
+
+
+
+
 def main():
-    state = "train"  # or eval
 
-    ## training config
-    max_epoch = 200
-    batch_size = 80
-    training_data_ratio = 0.9 
+    from default_config import get_default_config
+    config = get_default_config()
 
-    
-    ## model config
-    T = 1000
-    channel = 128
-    channel_mult = [1, 2, 3, 4]
-    attn = [2]
-    num_res_blocks = 2
-    dropout = 0.15
-    lr = 1e-4
-    multiplier = 2.
-    beta_1 = 1e-4
-    beta_T = 0.02
-    img_size = 32
-    grad_clip = 1.
-    device = "cuda:6"  # MAKE SURE YOU HAVE A GPU
-    use_DDP = False
-    training_load_weight = False
-    std_rate = 1.0
-
-    model_home = "models"
-    model_name = f"ddpm_init_{std_rate}" 
-    model_path = os.path.join(model_home, model_name)
-    model_code_path = os.path.join(".", model_path, "code")
-    epoch = 100
-
-    data_home = "data"
-    dataset = "CIFAR10"
-    dataset_path = os.path.join(data_home, dataset)
-
-    ## sample config
-    result_home = "result"
-    sampledNoisyImgName = f"NoisyNoGuidenceImgs_std_rate{std_rate}_epoch{epoch}.png"
-    sampledImgName = f"SampledNoGuidenceImgs_std_rate{std_rate}_epoch{epoch}.png"
-    nrow = 8
-    note = "测试demo\n"
-
-    config = locals() # record previous parameters as dict.
-
-    # Each key in the config can be passed as an argument via argparse.
-    args = parse_keys(config) 
+    args = args_process(parse_keys(config))  # Each key in the config can be passed as an argument via argparse.
 
     if args.state == "train":
         setup_platform(args)
